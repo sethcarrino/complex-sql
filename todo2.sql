@@ -37,8 +37,19 @@ SELECT * FROM todo WHERE priority = 3 AND completed_at IS NULL ORDER BY title DE
 
 -- Write a SELECT statement to find the number of incomplete todos by priority.
 
-SELECT COUNT(completed_at), priority FROM todo GROUP BY priority HAVING COUNT(completed_at) IS NULL;
+SELECT COUNT(*) FROM todo WHERE completed_at IS NULL GROUP BY priority;
 
 -- Write a SELECT statement to find the number of todos by priority created in the last 30 days.
 
+SELECT count(*) FROM todo WHERE created_at > (Current_date - interval '30 days') GROUP BY priority;
+
 -- Write a SELECT statement to find the next todo you should work on. This is the todo with the highest priority that was created first.
+
+SELECT * FROM todo WHERE created_at = (select min(created_at) FROM todo WHERE priority = 1 AND completed_at IS NULL);
+
+
+-- ************************
+-- Exporting the file
+-- ************************
+
+pg_dump --no-owner todo > videostore.sql
